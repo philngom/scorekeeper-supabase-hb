@@ -7,15 +7,26 @@ export async function createGame(game){
     const newGame = { ...game };
 
     // create a single new game in the games table using the above object
-    
+    const response = await client
+        .from('games')
+        .insert(({
+            name1: newGame.name1,
+            name2: newGame.name2,
+            score1: newGame.score1,
+            score2: newGame.score2
+        }));
+
     return checkError(response);
 }
 
 
 export async function getGames() {
     // select all games from the games table
+    const response = await client
+        .from('games')
+        .select();
 
-    return checkError(response);    
+    return checkError(response);
 }
 
 export async function getUser() {
@@ -26,7 +37,7 @@ export async function getUser() {
 export async function checkAuth() {
     const user = await getUser();
 
-    if (!user) location.replace('../'); 
+    if (!user) location.replace('../');
 }
 
 export async function redirectToGames() {
@@ -37,7 +48,6 @@ export async function redirectToGames() {
 
 export async function signupUser(email, password){
     const response = await client.auth.signUp({ email, password });
-    
     return checkError(response);
 }
 
